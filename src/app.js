@@ -5,20 +5,22 @@ import rateLimit from "express-rate-limit"
 import { env } from "./config/env.js"
 import { errorHandler } from "./middlewares/errorHandler.js"
 import { authRouter } from "./routes/auth.routes.js"
+import { productRouter } from "./routes/product.routes.js"
 
 export const createApp = () => {
-    const app = express ()
+    const app = express()
 
     app.use(express.json())
     app.use(helmet())
     app.use(cors({ origin: env.corsOrigin }))
-    app.use(rateLimit({ windowMs: 60_000, max: 100}))
+    app.use(rateLimit({ windowMs: 60_000, max: 100 }))
 
     app.get("/health", (_request, response) => {
         response.json({ ok: true })
     })
 
-app.use("/auth", authRouter())
+    app.use("/auth", authRouter())
+    app.use("/products", productRouter())
 
     app.use(errorHandler)
 
